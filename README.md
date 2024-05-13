@@ -1,4 +1,4 @@
-#SISTC
+# SISTC
 
 Este repositório contém códigos desenvolvidos para a disciplina de SISTC (Sistemas de Telecomunicações) na Faculdade de Engenharia Eletrotécnica e de Computadores (ISEP).
 
