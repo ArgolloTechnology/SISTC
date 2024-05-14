@@ -79,17 +79,20 @@ int main (int argc, char* const argv[]) {
 
     printf("escreva a mensagem:\n");
 	msg1_t msg;
-	msg.student_id = 1220700;
-    fgets(msg.text + strlen(msg.text), sizeof(msg.text), stdin);
-  tempo = 1;
+	strcpy(msg.student_id, "1220700");
+	fgets(msg.text + strlen(msg.text), sizeof(msg.text), stdin);
+  //tempo = 1;
   //send string to server
-  write(socket_descriptor, msg, strlen(msg));
+  write(socket_descriptor, &msg, sizeof(msg));
+  /*
   char linha1[2000] = "", linha2[2000] = "";
   int n1 = myReadLine1(socket_descriptor, linha1, 2000);
   int n2 = myReadLine1(socket_descriptor, linha2, 2000);
   printf("%s",buffer);
-  int nbytes = n1+n2;
-  printf("Mensagem: %s\n""Nome: %s\n""Total: %d\n", linha1, linha2, nbytes);
+  */
+  msg2_t res;
+  int nbytes = myReadBlock(socket_descriptor, &res, sizeof(res));
+  printf("Mensagem: %sNome: %s\nTotal: %d\n", res.text, res.student_name, nbytes);
   return 0;
 }
 
