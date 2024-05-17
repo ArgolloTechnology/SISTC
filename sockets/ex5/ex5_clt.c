@@ -14,15 +14,6 @@ void recv_server_reply2(int);
 int my_connect(char *servername, char *port);
 void print_socket_address(int sd);
 
-int tempo = 0;
-
-void tempoAcabou(int s){
-	if(tempo == 0){
-		tempo = 1;
-		exit(1);
-	}
-}
-
 typedef struct {
 	char student_id[7];
 	char text[2000]; //should be ‘\0’ terminated
@@ -64,8 +55,6 @@ int myReadBlock(int s, void *buf, int count) {
 }
 
 int main (int argc, char* const argv[]) {
-	
-	signal(SIGALRM, tempoAcabou);
 
   if(argc!=3) {
     printf("Usage: %s server_ip_address port_number\n",argv[0]);
@@ -80,9 +69,14 @@ int main (int argc, char* const argv[]) {
     printf("escreva a mensagem:\n");
 	msg1_t msg;
 	strcpy(msg.student_id, "1220700");
-	fgets(msg.text, sizeof(msg.text), stdin);
-  //tempo = 1;
-  //send string to server
+	char s[2000];
+	fgets(s, sizeof(s), stdin);
+	int nBytes = strlen(s);
+	char nBytesString[16];
+	sprintf(nBytesString, "%d", nBytes);
+	strcpy(msg.text, nBytesString);
+	strcat(msg.text, "\n");
+	strcat(msg.text, s);
   write(socket_descriptor, &msg, sizeof(msg));
   /*
   char linha1[2000] = "", linha2[2000] = "";
@@ -92,7 +86,7 @@ int main (int argc, char* const argv[]) {
   */
   msg2_t res;
   int nbytes = myReadBlock(socket_descriptor, &res, sizeof(res));
-  printf("Mensagem: %sNome: %s\nTotal: %d\n", res.text, res.student_name, nbytes);
+  printf("Mensagem: %sNome: %s\n", res.text, res.student_name);
   return 0;
 }
 
